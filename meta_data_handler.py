@@ -1,3 +1,5 @@
+import dataAcquisitionHelperFunctions as run
+
 
 class meta_data_handler():
     def __init__(self, frame):
@@ -12,3 +14,14 @@ class meta_data_handler():
                 self.metadata[counter] = widget.get()
                 counter = counter + 1
 
+    def runscan(self):
+        self.grab_meta_data()
+        counts = int(self.metadata[0])
+        trigParams, chanParams, timeParams, chanNumbers = run.setupOscilloscopeInput()
+        dataAcq = run.dataAcquisition()
+        dataAcq.prepareOscilloscope(triggerParameters=trigParams, channelParameters=chanParams,
+                                    timeParameters=timeParams)
+        for i in tqdm(range(numOfIterations)):
+            dataAcq.collectData(channels=chanNumbers)
+        # Plot data
+        dataAcq.plotData(plotParameters=None)
