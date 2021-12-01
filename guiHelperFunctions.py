@@ -25,12 +25,12 @@ def selectSaveDirectory(window, placerow):
     folderPath = StringVar()
     folderPath.set(cwd)
     browseLabel = Label(window, text="Data Directory")
-    browseEntry = Entry(window, textvariable=folderPath)
+    browseEntry = Entry(window, textvariable=folderPath, width = 25)
     browseButton = Button(window,text="Browse",command=lambda: openDirectory(folderPath, cwd))
     
     # Locations
-    browseEntry.grid(row=placerow, column=1)
-    browseLabel.grid(row=placerow, column=0)
+    browseEntry.grid(row=placerow, column=1, sticky=W, pady=10)
+    browseLabel.grid(row=placerow, column=0, sticky=W, pady=5)
     browseButton.grid(row=placerow, column=2)
 
     return folderPath.get()
