@@ -1,5 +1,11 @@
 from tkinter import *
 import guiHelperFunctions as gui
+import numpy as np
+
+### TEST DATA ###
+xData = np.linspace(0,10,11)
+yData = np.random.rand(11,1)
+#################
 
 # Create application window
 window, w, h = gui.createWindow()
@@ -12,6 +18,9 @@ rightFrame.grid(row=0,column=1)
 
 # Create browse button for choosing file save location
 folderPath = gui.selectSaveDirectory(leftFrame)
+plots = gui.initPlotFigures(rightFrame)
+gui.plotData(plots[0],xData,yData)
+gui.plotData(plots[1],xData,yData)
 
 # Main loop to open GUI window
 window.mainloop()

@@ -1,6 +1,11 @@
 from tkinter import *
 from tkinter import ttk, filedialog
 from tkinter.filedialog import askdirectory
+import matplotlib
+matplotlib.use('TkAgg')
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.figure import Figure
+import matplotlib.pyplot as plt
 import os
 
 def createWindow():
@@ -22,7 +27,7 @@ def selectSaveDirectory(window):
     browseLabel = Label(window, text="Data Directory")
     browseEntry = Entry(window, textvariable=folderPath)
     browseButton = Button(window,text="Browse",command=lambda: openDirectory(folderPath, cwd))
-
+    
     # Locations
     browseEntry.grid(row=0, column=1)
     browseLabel.grid(row=0, column=0)
@@ -30,3 +35,27 @@ def selectSaveDirectory(window):
 
     return folderPath.get()
 
+def initPlotFigures(window):
+    #Initialize the two plots that are run in the rightFrame
+    #This function will create a figure with 2 subplots stacked vertically
+    fig, ax = plt.subplots(2)
+
+    a = ax[0]
+    a.set_title("Most recent collection")
+    a.set_xlabel("Time (ns)")
+    a.set_ylabel("Counts")
+
+    b = ax[1]
+    b.set_title("Timing vs. Length")
+    b.set_xlabel("Length (cm)")
+    b.set_ylabel("Time (s)")
+
+    plt.tight_layout()
+    canvas = FigureCanvasTkAgg(fig, master=window)
+    canvas.get_tk_widget().pack()
+    canvas.draw()   
+
+    return a, b
+
+def plotData(plot, x, y):
+    plot.plot(x,y)
