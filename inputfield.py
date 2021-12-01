@@ -2,9 +2,8 @@ import tkinter as tk
 
 
 class inputfield(tk.Frame):
-    def __init__(self, name=None,placeholder = 0, xpos=0, ypos=0, master=None, sep = 150, width=10):
+    def __init__(self, name=None,master=None, xpos=0, ypos=0, sep = 150, width=10, placeholder = 0):
         super().__init__(master)
-        self.pack()
         self.placeholder = str(placeholder)
         self.xpos = xpos
         self.ypos = ypos
