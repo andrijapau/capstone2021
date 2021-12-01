@@ -33,7 +33,7 @@ def create_left_frame(container):
     fiblen = tk.Entry(frame, width=25)
     fiblen.grid(column=1, row=4, sticky=tk.W)
     metadata = meta_data_handler(frame)
-    tk.Button(frame, text='Run', width = "6", command = metadata.runscan).grid(column=2, row=5, sticky=tk.E)
+    tk.Button(frame, text='Run', width = "6", command = metadata.runscan).grid(column=2, row=5)
 
     separator = ttk.Separator(frame, orient='horizontal')
     separator.grid(row=6, columnspan=4, sticky = tk.EW)
@@ -44,16 +44,16 @@ def create_left_frame(container):
 
     buttonframe = tk.Frame(frame)
     buttonframe.grid(column=1, row=9, rowspan=2, columnspan=2)
-    tk.Button(buttonframe, text='Plot Timing Graph', command=metadata.runscan).grid(column=0, row=0, sticky=tk.W, padx=5,pady=5)
-    tk.Button(buttonframe, text='Plot Flat Color Plot', command=metadata.runscan).grid(column=1, row=0, sticky=tk.E, padx=5,pady=5)
-    tk.Button(buttonframe, text='Plot Full 3D Plot', command=metadata.runscan).grid(column=0, row=1, sticky=tk.W, padx=5,pady=5)
+    tk.Button(buttonframe, text='Plot Timing Graph', width=15, command=metadata.runscan).grid(column=0, row=0, sticky=tk.W, padx=5,pady=5)
+    tk.Button(buttonframe, text='Plot Flat Color Plot', width=15,command=metadata.runscan).grid(column=1, row=0, sticky=tk.E, padx=5,pady=5)
+    tk.Button(buttonframe, text='Plot Full 3D Plot', width=15,command=metadata.runscan).grid(column=0, row=1, sticky=tk.W, padx=5,pady=5)
 
     separator = ttk.Separator(frame, orient='horizontal')
     separator.grid(row=11, columnspan=4, sticky = tk.EW)
 
     tk.Label(frame, text='View specific plots:').grid(column=0, row=12, sticky=tk.W)
     plotpath = gui.selectSaveDirectory(frame, 13, "Read Directory")
-    tk.Button(frame, text='View Plot', command=metadata.runscan).grid(column=2, row=14, sticky=tk.E, padx=5,pady=5)
+    tk.Button(frame, text='View Plot', command=metadata.runscan).grid(column=2, row=14, padx=5,pady=5)
 
     for widget in frame.winfo_children():
         widget.grid(padx=0, pady=5)

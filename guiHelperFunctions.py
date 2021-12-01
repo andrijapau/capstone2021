@@ -26,7 +26,7 @@ def selectSaveDirectory(window, placerow, name):
     folderPath.set(cwd)
     browseLabel = Label(window, text=name)
     browseEntry = Entry(window, textvariable=folderPath, width = 25)
-    browseButton = Button(window,text="Browse",command=lambda: openDirectory(folderPath, cwd))
+    browseButton = Button(window,text="Browse",width="6",command=lambda: openDirectory(folderPath, cwd))
     
     # Locations
     browseEntry.grid(row=placerow, column=1, sticky=W, pady=10)
