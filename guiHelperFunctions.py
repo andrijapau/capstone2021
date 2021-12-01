@@ -19,7 +19,7 @@ def openDirectory(folderPath, cwd):
     folderSelected = askdirectory(initialdir="{}".format(cwd), title="Please select a folder...")
     folderPath.set(folderSelected)
 
-def selectSaveDirectory(window):
+def selectSaveDirectory(window, placerow):
     # Set-up
     cwd = os.getcwd()
     folderPath = StringVar()
@@ -29,9 +29,9 @@ def selectSaveDirectory(window):
     browseButton = Button(window,text="Browse",command=lambda: openDirectory(folderPath, cwd))
     
     # Locations
-    browseEntry.grid(row=0, column=1)
-    browseLabel.grid(row=0, column=0)
-    browseButton.grid(row=0, column=2)
+    browseEntry.grid(row=placerow, column=1)
+    browseLabel.grid(row=placerow, column=0)
+    browseButton.grid(row=placerow, column=2)
 
     return folderPath.get()
 
