@@ -15,8 +15,8 @@ window.columnconfigure(1, weight=1)
 leftFrame, metadatahandler = create_left_frame(window)
 rightFrame = Frame(window,bg="RED")
 
-leftFrame.grid(row=0,column=0)
-rightFrame.grid(row=0,column=1)
+leftFrame.grid(row=0,column=0, padx=20, pady=50)
+rightFrame.grid(row=0,column=1, padx=20, pady=50)
 
 
 

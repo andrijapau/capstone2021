@@ -12,7 +12,7 @@ def createWindow():
     window = Tk()
     window.title("MATHUSLA Timing Measurement GUI")
     w, h = window.winfo_screenwidth(), window.winfo_screenheight()
-    window.geometry("{0}x{1}+0+0".format(w, h))
+    #window.geometry("{0}x{1}+0+0".format(w, h))
     return window, w, h
 
 def openDirectory(folderPath, cwd):
