@@ -1,8 +1,8 @@
 import tkinter as tk
 
 
-class inputfield(tk.Frame):
-    def __init__(self, name=None,master=None, xpos=0, ypos=0, sep = 150, width=10, placeholder = 0):
+class abstractFrame(tk.Frame):
+    def __init__(self, master=None):
         super().__init__(master)
         self.placeholder = str(placeholder)
         self.xpos = xpos
