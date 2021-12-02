@@ -52,7 +52,7 @@ def initPlotFigures(window):
 
     plt.tight_layout()
     canvas = FigureCanvasTkAgg(fig, master=window)
-    canvas.get_tk_widget().pack(expand=True)
+    canvas.get_tk_widget().pack(side=BOTTOM, fill=BOTH, expand=True)
     canvas.draw()   
 
     return a, b
