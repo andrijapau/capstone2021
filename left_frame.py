@@ -25,13 +25,15 @@ def create_left_frame(container):
     fibname = tk.Entry(frame, width=25)
     fibname.grid(column=1, row=2, sticky=tk.W)
 
-    tk.Label(frame, text='Distance Away from Ref SiPM:').grid(column=0, row=3, sticky=tk.W)
-    distway = tk.Entry(frame, width=25)
-    distway.grid(column=1, row=3, sticky=tk.W)
-
-    tk.Label(frame, text='Fibre Length:').grid(column=0, row=4, sticky=tk.W)
+    tk.Label(frame, text='Fibre Length:').grid(column=0, row=3, sticky=tk.W)
     fiblen = tk.Entry(frame, width=25)
-    fiblen.grid(column=1, row=4, sticky=tk.W)
+    fiblen.grid(column=1, row=3, sticky=tk.W)
+
+    tk.Label(frame, text='Distance Away from Ref SiPM:').grid(column=0, row=4, sticky=tk.W)
+    distway = tk.Entry(frame, width=25)
+    distway.grid(column=1, row=4, sticky=tk.W)
+
+
     metadata = meta_data_handler(frame)
     tk.Button(frame, text='Run', width = "6", command = metadata.runscan).grid(column=2, row=5)
 
@@ -40,20 +42,25 @@ def create_left_frame(container):
 
     tk.Label(frame, text='Plotting Functions:').grid(column=0, row=7, sticky=tk.W)
 
-    plotpath = gui.selectSaveDirectory(frame, 8, "Save Plot Directory")
+    readpath = gui.selectSaveDirectory(frame, 8, "Read Plot Directory")
+    plotpath = gui.selectSaveDirectory(frame, 9, "Save Plot Directory")
+
 
     buttonframe = tk.Frame(frame)
-    buttonframe.grid(column=1, row=9, rowspan=2, columnspan=2)
-    tk.Button(buttonframe, text='Plot Timing Graph', width=15, command=metadata.runscan).grid(column=0, row=0, sticky=tk.W, padx=5,pady=5)
-    tk.Button(buttonframe, text='Plot Flat Color Plot', width=15,command=metadata.runscan).grid(column=1, row=0, sticky=tk.E, padx=5,pady=5)
-    tk.Button(buttonframe, text='Plot Full 3D Plot', width=15,command=metadata.runscan).grid(column=0, row=1, sticky=tk.W, padx=5,pady=5)
+    buttonframe.grid(column=1, row=10, rowspan=2, columnspan=2)
+    tk.Button(buttonframe, text='Read CSV Data', width=15, command=metadata.runscan).grid(column=0, row=0,
+                                                                                              sticky=tk.W, padx=5,
+                                                                                              pady=5)
+    tk.Button(buttonframe, text='Plot Timing Graph', width=15, command=metadata.runscan).grid(column=1, row=0, sticky=tk.W, padx=5,pady=5)
+    tk.Button(buttonframe, text='Plot Flat Color Plot', width=15,command=metadata.runscan).grid(column=0, row=1, sticky=tk.E, padx=5,pady=5)
+    tk.Button(buttonframe, text='Plot Full 3D Plot', width=15,command=metadata.runscan).grid(column=1, row=1, sticky=tk.W, padx=5,pady=5)
 
     separator = ttk.Separator(frame, orient='horizontal')
-    separator.grid(row=11, columnspan=4, sticky = tk.EW)
+    separator.grid(row=12, columnspan=4, sticky = tk.EW)
 
-    tk.Label(frame, text='View specific plots:').grid(column=0, row=12, sticky=tk.W)
-    plotpath = gui.selectSaveDirectory(frame, 13, "Read Directory")
-    tk.Button(frame, text='View Plot', command=metadata.runscan).grid(column=2, row=14, padx=5,pady=5)
+    tk.Label(frame, text='View specific raw data:').grid(column=0, row=13, sticky=tk.W)
+    plotpath = gui.selectSaveDirectory(frame, 14, "Read Directory")
+    tk.Button(frame, text='View Plot', command=metadata.runscan).grid(column=2, row=15, padx=5,pady=5)
 
     for widget in frame.winfo_children():
         widget.grid(padx=0, pady=5)
