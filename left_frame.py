@@ -4,7 +4,7 @@ import guiHelperFunctions as gui
 from meta_data_handler import meta_data_handler
 
 
-def create_left_frame(container):
+def create_left_frame(container, plots, canvas):
 
     frame = tk.Frame(container)
 
@@ -34,7 +34,7 @@ def create_left_frame(container):
     distway.grid(column=1, row=4, sticky=tk.W)
 
 
-    metadata = meta_data_handler(frame)
+    metadata = meta_data_handler(frame, plots, canvas)
     tk.Button(frame, text='Lock in Parameter', command = metadata.lockin).grid(column=1, row=5)
     tk.Button(frame, text='Run Next', command=metadata.runNext).grid(column=2, row=5)
     tk.Button(frame, text='Stop', command=metadata.stopscan).grid(column=3, row=5)
@@ -50,9 +50,7 @@ def create_left_frame(container):
 
     buttonframe = tk.Frame(frame)
     buttonframe.grid(column=1, row=10, rowspan=2, columnspan=2)
-    tk.Button(buttonframe, text='Read CSV Data', width=15).grid(column=0, row=0,
-                                                                                              sticky=tk.W, padx=5,
-                                                                                              pady=5)
+    tk.Button(buttonframe, text='Read CSV Data', width=15).grid(column=0, row=0,sticky=tk.W, padx=5,pady=5)
     tk.Button(buttonframe, text='Plot Timing Graph', width=15).grid(column=1, row=0, sticky=tk.W, padx=5,pady=5)
     tk.Button(buttonframe, text='Plot Flat Color Plot', width=15).grid(column=0, row=1, sticky=tk.E, padx=5,pady=5)
     tk.Button(buttonframe, text='Plot Full 3D Plot', width=15).grid(column=1, row=1, sticky=tk.W, padx=5,pady=5)

@@ -14,8 +14,8 @@ from tqdm import tqdm
 trigParams, chanParams, timeParams, chanNumbers = run.setupOscilloscopeInput()
 
 # Number of data points
-numOfIterations = 5000
-collectData = False
+numOfIterations = 5
+collectData = True
 
 # Execute Functions
 if collectData:
@@ -24,6 +24,6 @@ if collectData:
     for i in tqdm(range(numOfIterations)):
         dataAcq.collectData(channels=chanNumbers)
     # Plot data
-    dataAcq.plotData(plotParameters=None)
+    dataAcq.plotHistogram(plotParameters=None)
 else:
     run.curveFit("16cm_from_sipm_maskingtape_channel4.csv")

@@ -3,7 +3,7 @@
 # Student Number: 1003995297
 # Date: Fri Nov 12, 2021
 # Description:
-
+from scipy.stats import norm
 # Import modules
 try:
     import pyvisa as visa
@@ -83,41 +83,45 @@ def gaussian(x, *p):
     # Gaussian guess function
     return p[0] + p[1] * np.exp(-1 * (x - p[2]) ** 2 / (2 * p[3] ** 2))
 
-def curveFit(fileName):
+def curveFit(plot, fileName = None, array = None):
     # Load data and convert to ns scale
-    data = np.loadtxt(fileName)
-    data_ns = data*(-1e9)
-    x, y_data, y_sigma = generateCurveFitData(data_ns)
+    data = []
+    if fileName != None:
+        data = np.loadtxt(fileName)
+    elif array != None:
+        data = array
+    else:
+        print("yo dumb")
+        #pop up for granddad
+    mu, sigma = norm.fit(data)
+    x = np.linspace(min(data), max(data), len(data))
+    #x, y_data, y_sigma = generateCurveFitData(data)
 
     # Set-up guess
-    background = 0.
-    mean = 17.8
-    sigma = 0.15
-    peakValue = 400.
-    pGuess = (background, peakValue, mean,sigma)
+    # background = 0.
+    # mean = -5 * 1e-9
+    # sigma = 0.15 * 1e-9
+    # peakValue = len(data)/3
+    # pGuess = (background, peakValue, mean,sigma)
 
     # Curve fit begins
-    p, cov = optimize.curve_fit(gaussian, x, y_data, p0=pGuess, sigma=y_sigma)
-
-    print("Estimated parameters: ", p)
-    try:
-        print("Estimated uncertainties: ", np.sqrt(cov.diagonal()))
-    except AttributeError:
-        print("Not calculated; fit is bad.")
+    # p, cov = optimize.curve_fit(gaussian, x, y_data, p0=pGuess, sigma=y_sigma)
+    pd = norm.pdf(x, mu, sigma)
+    # print("Estimated parameters: ", p)
+    # try:
+    #     print("Estimated uncertainties: ", np.sqrt(cov.diagonal()))
+    # except AttributeError:
+    #     print("Not calculated; fit is bad.")
 
     # Plotting
-    pylab.title("Curve Fit of {}".format(fileName))
-    pylab.ylabel("Counts")
-    pylab.xlabel("Time Delay (ns)")
-    pylab.plot(x, y_data, 'ro', x, gaussian(x, *p))
-    pylab.errorbar(x, y_data, yerr=y_sigma, fmt='r+')
-    pylab.show()
+    return x, pd
+    #plot.errorbar(x, y_data, yerr=y_sigma, fmt='r+')
+    #plot.show()
 
 class dataAcquisition:
 
     def __init__(self):
         """"""
-
         if platform.system() == "Windows":
             os.add_dll_directory("C:\\Program Files\\Keysight\\IO Libraries Suite\\bin")
             self.rm = visa.ResourceManager("ktvisa32")
@@ -280,15 +284,16 @@ class dataAcquisition:
         """"""
         self.results += [data]
 
-    def plotHistogram(self, plot, plotParameters, filename, binsize):
+    def plotHistogram(self, plot, plotParameters, filename, counts):
         """"""
-        fibreName = "Y-11J"
+        #fibreName = "Y-11J"
+        plot.clear()
         np.savetxt(filename, self.results, delimiter=",")
-
-        plot.hist(self.results,bins=int(np.sqrt(binsize)))
-        plot.title("Timing Resolution of {} WLSF".format(fibreName))
-        plot.ylabel("Counts")
-        plot.xlabel("Delay (s)")
-        plot.xlim([88E-9,95E-9])
-        plot.show()
+        #print(self.results)
+        plot.hist(self.results,bins=int(np.sqrt(counts)),density=True)
+        #plot.title("Timing Resolution of {} WLSF".format(fibreName))
+        # plot.ylabel("Counts")
+        # plot.xlabel("Delay (s)")
+        # plot.xlim([88E-9,95E-9])
+        #plt.show()
 

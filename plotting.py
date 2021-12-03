@@ -7,6 +7,7 @@ st1 = np.genfromtxt("./capstone_data/30cm_from_sipm_maskingtape_channel4.csv", d
 mu1, sigma1 = norm.fit(st1)
 x1 = np.linspace(min(st1), max(st1), 5000)
 pd1 = norm.pdf(x1, mu1, sigma1)
+print([mu1, sigma1])
 etapos1 = mu1*3*10**8/1.59
 
 st2 = np.genfromtxt("./capstone_data/80cm_from_sipm_maskingtape_channel4.csv", dtype= float)
