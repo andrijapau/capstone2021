@@ -27,7 +27,7 @@ rightFrame.grid(row=0,column=1, padx=20, pady=50)
 
 plots = gui.initPlotFigures(rightFrame)
 try:
-    metadatahandler.dataAcq.plotHistogram(plots[0], plotparamter = None, filename = metadatahandler.currfilename, binsize = int(sqrt(metadatahandler.metadata[0])))
+    metadatahandler.plotHist(plots[0])
 except:
     gui.plotHistogram(plots[0],yData)
 gui.plotData(plots[1],xData,yData)

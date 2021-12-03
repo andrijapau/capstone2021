@@ -56,4 +56,9 @@ class meta_data_handler():
                 counter = counter + 1
         self.dataAcq = None
 
-
+    def plotHist(self, plot):
+        try:
+            self.dataAcq.plotHistogram(plot, plotparamter = None, filename = self.currfilename, binsize = int(sqrt(self.metadata[0])))
+        except:
+            print("WTF IS GOING ON")
+        return 0
