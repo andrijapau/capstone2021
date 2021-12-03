@@ -19,13 +19,15 @@ leftFrame.grid(row=0,column=0, padx=20, pady=50)
 rightFrame.grid(row=0,column=1, padx=20, pady=50)
 
 
+
+
 #region leftframe
 # Create browse button for choosing file save location
 
-folderPath = gui.selectSaveDirectory(leftFrame,0)
 plots = gui.initPlotFigures(rightFrame)
-gui.plotHistogram(plots[0],xData,yData)
+gui.plotData(plots[0],xData,yData)
 gui.plotData(plots[1],xData,yData)
+
 
 #endregion
 

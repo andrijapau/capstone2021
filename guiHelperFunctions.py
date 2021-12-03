@@ -52,14 +52,10 @@ def initPlotFigures(window):
 
     plt.tight_layout()
     canvas = FigureCanvasTkAgg(fig, master=window)
-    canvas.get_tk_widget().pack(side=BOTTOM, fill=BOTH, expand=True)
+    canvas.get_tk_widget().pack(expand=True)
     canvas.draw()   
 
     return a, b
 
-def plotData(plot, x, y):   
+def plotData(plot, x, y):
     plot.plot(x,y)
-
-def plotHistogram(plot, x, y):
-    return True
-
