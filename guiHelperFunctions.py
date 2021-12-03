@@ -12,25 +12,25 @@ def createWindow():
     window = Tk()
     window.title("MATHUSLA Timing Measurement GUI")
     w, h = window.winfo_screenwidth(), window.winfo_screenheight()
-    window.geometry("{0}x{1}+0+0".format(w, h))
+    #window.geometry("{0}x{1}+0+0".format(w, h))
     return window, w, h
 
 def openDirectory(folderPath, cwd):
     folderSelected = askdirectory(initialdir="{}".format(cwd), title="Please select a folder...")
     folderPath.set(folderSelected)
 
-def selectSaveDirectory(window, placerow):
+def selectSaveDirectory(window, placerow, name):
     # Set-up
     cwd = os.getcwd()
     folderPath = StringVar()
     folderPath.set(cwd)
-    browseLabel = Label(window, text="Data Directory")
-    browseEntry = Entry(window, textvariable=folderPath)
-    browseButton = Button(window,text="Browse",command=lambda: openDirectory(folderPath, cwd))
+    browseLabel = Label(window, text=name)
+    browseEntry = Entry(window, textvariable=folderPath, width = 25)
+    browseButton = Button(window,text="Browse",width="6",command=lambda: openDirectory(folderPath, cwd))
     
     # Locations
-    browseEntry.grid(row=placerow, column=1)
-    browseLabel.grid(row=placerow, column=0)
+    browseEntry.grid(row=placerow, column=1, sticky=W, pady=10)
+    browseLabel.grid(row=placerow, column=0, sticky=W, pady=5)
     browseButton.grid(row=placerow, column=2)
 
     return folderPath.get()
@@ -57,5 +57,9 @@ def initPlotFigures(window):
 
     return a, b
 
-def plotData(plot, x, y):
+def plotData(plot, x, y):   
     plot.plot(x,y)
+
+def plotHistogram(plot, x, y):
+    return True
+

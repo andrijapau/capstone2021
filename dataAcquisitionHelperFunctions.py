@@ -141,7 +141,6 @@ class dataAcquisition:
 
         # Set-up results array to store data
         self.results = []
-        self.fileName = "150cm_from_sipm_maskingtape_channel4.csv"
 
     def doCommand(self, command, hideParams=False):
         """"""
@@ -281,10 +280,10 @@ class dataAcquisition:
         """"""
         self.results += [data]
 
-    def plotData(self, plotParameters):
+    def plotData(self, plotParameters, filename):
         """"""
         fibreName = "Y-11J"
-        np.savetxt(self.fileName, self.results, delimiter=",")
+        np.savetxt(filename, self.results, delimiter=",")
 
         plt.hist(self.results,bins=int(np.sqrt(1000)))
         plt.title("Timing Resolution of {} WLSF".format(fibreName))
