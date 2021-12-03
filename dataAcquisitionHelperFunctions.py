@@ -280,15 +280,15 @@ class dataAcquisition:
         """"""
         self.results += [data]
 
-    def plotData(self, plotParameters, filename):
+    def plotHistogram(self, plot, plotParameters, filename, binsize):
         """"""
         fibreName = "Y-11J"
         np.savetxt(filename, self.results, delimiter=",")
 
-        plt.hist(self.results,bins=int(np.sqrt(1000)))
-        plt.title("Timing Resolution of {} WLSF".format(fibreName))
-        plt.ylabel("Counts")
-        plt.xlabel("Delay (s)")
-        plt.xlim([88E-9,95E-9])
-        plt.show()
+        plot.hist(self.results,bins=int(np.sqrt(binsize)))
+        plot.title("Timing Resolution of {} WLSF".format(fibreName))
+        plot.ylabel("Counts")
+        plot.xlabel("Delay (s)")
+        plot.xlim([88E-9,95E-9])
+        plot.show()
 

@@ -2,6 +2,7 @@ from tkinter import *
 import guiHelperFunctions as gui
 import numpy as np
 from left_frame import *
+import dataAcquisitionHelperFunctions as datacq
 
 ### TEST DATA ###
 xData = np.linspace(0,10,1000)
@@ -25,7 +26,7 @@ rightFrame.grid(row=0,column=1, padx=20, pady=50)
 # Create browse button for choosing file save location
 
 plots = gui.initPlotFigures(rightFrame)
-gui.plotHistogram(plots[0],yData)
+metadatahandler.dataAcq.plotHistogram(plots[0], plotparamter = None, filename = metadatahandler.currfilename, binsize = int(sqrt(metadatahandler.metadata[0])))
 gui.plotData(plots[1],xData,yData)
 
 
