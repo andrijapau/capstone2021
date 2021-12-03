@@ -18,7 +18,8 @@ class meta_data_handler():
                 self.metadata[counter] = widget.get()
                 counter = counter + 1
 
-    def runscan(self):
+
+    def runNext(self):
         self.grab_meta_data()
         counts = int(self.metadata[0])
         time = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
@@ -31,3 +32,23 @@ class meta_data_handler():
             dataAcq.collectData(channels=chanNumbers)
         # Plot data
         dataAcq.plotData(plotParameters=None, filename = filename)
+
+    def lockin(self):
+        counter = 0
+        for widget in self.frame.winfo_children():
+            if counter == 4:
+                break
+            if widget.winfo_class() == 'Entry':
+                widget.config(state = "disabled")
+                counter = counter + 1
+
+    def stopscan(self):
+        counter = 0
+        for widget in self.frame.winfo_children():
+            if counter == 4:
+                break
+            if widget.winfo_class() == 'Entry':
+                widget.config(state = "normal")
+                counter = counter + 1
+
+

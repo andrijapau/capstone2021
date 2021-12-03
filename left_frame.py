@@ -35,7 +35,9 @@ def create_left_frame(container):
 
 
     metadata = meta_data_handler(frame)
-    tk.Button(frame, text='Run', width = "6", command = metadata.runscan).grid(column=2, row=5)
+    tk.Button(frame, text='Lock in Parameter', command = metadata.lockin).grid(column=1, row=5)
+    tk.Button(frame, text='Run Next', command=metadata.runNext).grid(column=2, row=5)
+    tk.Button(frame, text='Stop', command=metadata.stopscan).grid(column=3, row=5)
 
     separator = ttk.Separator(frame, orient='horizontal')
     separator.grid(row=6, columnspan=4, sticky = tk.EW)
@@ -48,19 +50,19 @@ def create_left_frame(container):
 
     buttonframe = tk.Frame(frame)
     buttonframe.grid(column=1, row=10, rowspan=2, columnspan=2)
-    tk.Button(buttonframe, text='Read CSV Data', width=15, command=metadata.runscan).grid(column=0, row=0,
+    tk.Button(buttonframe, text='Read CSV Data', width=15).grid(column=0, row=0,
                                                                                               sticky=tk.W, padx=5,
                                                                                               pady=5)
-    tk.Button(buttonframe, text='Plot Timing Graph', width=15, command=metadata.runscan).grid(column=1, row=0, sticky=tk.W, padx=5,pady=5)
-    tk.Button(buttonframe, text='Plot Flat Color Plot', width=15,command=metadata.runscan).grid(column=0, row=1, sticky=tk.E, padx=5,pady=5)
-    tk.Button(buttonframe, text='Plot Full 3D Plot', width=15,command=metadata.runscan).grid(column=1, row=1, sticky=tk.W, padx=5,pady=5)
+    tk.Button(buttonframe, text='Plot Timing Graph', width=15).grid(column=1, row=0, sticky=tk.W, padx=5,pady=5)
+    tk.Button(buttonframe, text='Plot Flat Color Plot', width=15).grid(column=0, row=1, sticky=tk.E, padx=5,pady=5)
+    tk.Button(buttonframe, text='Plot Full 3D Plot', width=15).grid(column=1, row=1, sticky=tk.W, padx=5,pady=5)
 
     separator = ttk.Separator(frame, orient='horizontal')
     separator.grid(row=12, columnspan=4, sticky = tk.EW)
 
     tk.Label(frame, text='View specific raw data:').grid(column=0, row=13, sticky=tk.W)
     plotpath = gui.selectSaveDirectory(frame, 14, "Read Directory")
-    tk.Button(frame, text='View Plot', command=metadata.runscan).grid(column=2, row=15, padx=5,pady=5)
+    tk.Button(frame, text='View Plot').grid(column=2, row=15, padx=5,pady=5)
 
     for widget in frame.winfo_children():
         widget.grid(padx=0, pady=5)
