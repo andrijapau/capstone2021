@@ -27,6 +27,8 @@ class meta_data_handler():
 
 
     def runNext(self):
+        self.dataAcq.results = []
+        self.grab_meta_data()
         for i in tqdm(range(int(self.metadata[0]))):
             if i % 20 == 0:
                 self.plotHist()
@@ -36,8 +38,13 @@ class meta_data_handler():
                 self.dataAcq.collectData(channels=self.chanNumber)
         # Plot data
         self.plotHist()
-        x, pd = run.curveFit(self.plots[0], array = self.dataAcq.results)
+        x, pd, mu, sigma = run.curveFit(self.plots[0], array = self.dataAcq.results)
         self.plots[0].plot(x,pd)
+        d = float(self.metadata[4])
+        sigmad = 4
+        self.plots[1].errorbar(d, mu, yerr=sigma, xerr=sigmad, fmt='r+')
+        #self.plots[1].set_xlim([0,400])
+        #self.plots[1].set_ylim([-20e-9, 20e-9])
         self.canvas.draw()
         #self.frame.update()
 

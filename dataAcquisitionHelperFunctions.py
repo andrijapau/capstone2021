@@ -114,7 +114,7 @@ def curveFit(plot, fileName = None, array = None):
     #     print("Not calculated; fit is bad.")
 
     # Plotting
-    return x, pd
+    return x, pd, mu, sigma
     #plot.errorbar(x, y_data, yerr=y_sigma, fmt='r+')
     #plot.show()
 

@@ -26,7 +26,7 @@ rightFrame.grid(row=0,column=1, padx=20, pady=50)
 
 #region leftframe
 # Create browse button for choosing file save location
-gui.plotData(plots[1],xData,yData)
+
 
 #endregion
 
