@@ -6,6 +6,7 @@ matplotlib.use('TkAgg')
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
+import numpy as np
 import os
 
 def createWindow():
@@ -59,3 +60,6 @@ def initPlotFigures(window):
 
 def plotData(plot, x, y):
     plot.plot(x,y)
+
+def plotHistogram(plot, x):
+    plot.hist(x, bins=int(np.sqrt(len(x))))
