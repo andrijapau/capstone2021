@@ -45,8 +45,8 @@ def create_left_frame(container, plots, canvas):
 
     metadata = meta_data_handler(frame, plots, canvas, [var1, var2, var3])
     tk.Button(frame, text='Lock in Parameter', command = metadata.lockin).grid(column=1, row=6)
-    tk.Button(frame, text='Run Next', command=metadata.runNext).grid(column=2, row=6)
-    tk.Button(frame, text='Stop', command=metadata.stopscan).grid(column=3, row=6)
+    tk.Button(frame, text='Run Next', command=metadata.runNext, state = 'disabled').grid(column=2, row=6)
+    tk.Button(frame, text='Stop', command=metadata.stopscan, state = 'disabled').grid(column=3, row=6)
 
     separator = ttk.Separator(frame, orient='horizontal')
     separator.grid(row=7, columnspan=4, sticky = tk.EW)

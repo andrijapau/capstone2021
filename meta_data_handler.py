@@ -39,7 +39,7 @@ class meta_data_handler():
         self.dataAcq.results = []
         self.grab_meta_data()
         time = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-        self.currfilename = self.metadata[1] + '\\' + 'MATHUSLA_' + self.metadata[0] + '_' + '_'.join(self.metadata[2:6]) + '_' + time + '.csv'
+        self.currfilename = self.metadata[1] + '\\' + 'MATHUSLA_' + self.metadata[0] + '_' +self.metadata[5] + '_' + '_'.join(self.metadata[2:4]) + '_' + time + '.csv'
         for i in tqdm(range(int(self.metadata[0]))):
             if i % 20 == 0:
                 self.plotHist()
@@ -87,7 +87,9 @@ class meta_data_handler():
                 bcounter = bcounter + 1
                 if bcounter == 2:
                     widget.config(state = "disabled")
-                    break
+                if bcounter == 3 or bcounter == 4:
+                    widget.config(state = "normal")
+
         # if not threewayxor(self.fibchecks[0].get(), self.fibchecks[1].get(),self.fibchecks[2].get()):
         #     print("Invalid Input")
         self.ifstopped = False
@@ -121,7 +123,8 @@ class meta_data_handler():
                 bcounter = bcounter + 1
                 if bcounter == 2:
                     widget.config(state = "normal")
-                    break
+                if bcounter == 3 or bcounter == 4:
+                    widget.config(state = "diabled")
         self.dataAcq = None
 
     def plotHist(self):
