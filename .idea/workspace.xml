@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4719ace9-4672-4120-bfb4-3f0b659b19e5" name="Changes" comment="fixed importing tkinter w/ Anaconda environment">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/guiHelperFunctions.py" beforeDir="false" afterPath="$PROJECT_DIR$/guiHelperFunctions.py" afterDir="false" />
-    </list>
+    <list default="true" id="4719ace9-4672-4120-bfb4-3f0b659b19e5" name="Changes" comment="fixed importing tkinter w/ Anaconda environment" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -109,8 +105,8 @@
     </configuration>
     <list>
       <item itemvalue="Python.capstoneConfig" />
-      <item itemvalue="Python.main" />
       <item itemvalue="Python.gui" />
+      <item itemvalue="Python.main" />
     </list>
     <recent_temporary>
       <list>
@@ -152,13 +148,10 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="fixed importing tkinter w/ Anaconda environment" />
     <option name="LAST_COMMIT_MESSAGE" value="fixed importing tkinter w/ Anaconda environment" />
-  </component>
-  <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/Software$gui.coverage" NAME="gui Coverage Results" MODIFIED="1638306529571" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Software$main.coverage" NAME="main Coverage Results" MODIFIED="1638300077759" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

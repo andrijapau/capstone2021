@@ -41,11 +41,11 @@ def initPlotFigures(window):
     #This function will create a figure with 2 subplots stacked vertically
     fig, ax = plt.subplots(2)
 
+
     a = ax[0]
     a.set_title("Most recent collection")
     a.set_xlabel("Time (ns)")
     a.set_ylabel("Counts")
-
     b = ax[1]
     b.set_title("Timing vs. Length")
     b.set_xlabel("Length (cm)")
@@ -56,7 +56,9 @@ def initPlotFigures(window):
     canvas.get_tk_widget().pack(expand=True)
     canvas.draw()
 
-    return a, b, canvas
+
+    return fig, a, b, canvas
+
 
 def plotData(plot, x, y):
     plot.plot(x,y)

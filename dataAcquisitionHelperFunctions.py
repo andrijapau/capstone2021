@@ -288,7 +288,6 @@ class dataAcquisition:
         """"""
         #fibreName = "Y-11J"
         plot.clear()
-        np.savetxt(filename, self.results, delimiter=",")
         #print(self.results)
         plot.hist(self.results,bins=int(np.sqrt(counts)),density=True)
         #plot.title("Timing Resolution of {} WLSF".format(fibreName))
