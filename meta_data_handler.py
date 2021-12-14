@@ -77,11 +77,15 @@ class meta_data_handler():
         self.tvsd[2] = self.tvsd[2] + [sigmad]
         self.tvsd[3] = self.tvsd[3] + [sigma]
 
+        self.plots[1].clear()
+        self.plots[1].set_title("Timing vs. Length")
+        self.plots[1].set_xlabel("Length (cm)")
+        self.plots[1].set_ylabel("Time (s)")
+            
         self.plots[1].plot(self.tvsd[0], self.tvsd[1], 'r+', picker=10)
         self.plots[1].errorbar(self.tvsd[0], self.tvsd[1], yerr=self.tvsd[3], xerr=self.tvsd[2], fmt='r+')
         
-        for artist in self.plots[1].collections:
-            artist.remove()
+       
             
         self.canvas.draw()
         self.frame.update()

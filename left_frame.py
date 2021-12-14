@@ -27,7 +27,7 @@ def changetvsd(metadata, filename):
         artist.remove()
     for artist in metadata.plots[1].collections:
         artist.remove()
-    metadata.plots[1].plot(metadata.tvsd[0], metadata.tvsd[1], 'ro')
+    metadata.plots[1].plot(metadata.tvsd[0], metadata.tvsd[1], 'ro', picker=10)
     metadata.plots[1].errorbar(metadata.tvsd[0], metadata.tvsd[1], yerr=metadata.tvsd[3], xerr=metadata.tvsd[2], fmt='r+')
     metadata.canvas.draw()
     metadata.frame.update()

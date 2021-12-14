@@ -24,9 +24,8 @@ fig, plots[0], plots[1], canvas = gui.initPlotFigures(rightFrame, 0)
 
 def on_pick(event):
     artist = event.artist
-    x, y = artist.get_xdata()[0], artist.get_ydata()[0]
-
     ind = event.ind
+    x, y = artist.get_xdata()[ind[0]], artist.get_ydata()[ind[0]]
     popup_warning([x, y], ind)
 
     return 0
@@ -51,10 +50,18 @@ def popup_warning(pos, ind):
 def deletepoint(frame, ind):
     for i in range(4):
         del metadatahandler.tvsd[i][ind[0]]
-    plots[1].clear()
-    canvas.draw()
-    window.update()
-    frame.destory()
+
+    metadatahandler.plots[1].clear()
+    metadatahandler.plots[1].set_title("Timing vs. Length")
+    metadatahandler.plots[1].set_xlabel("Length (cm)")
+    metadatahandler.plots[1].set_ylabel("Time (s)")
+
+    metadatahandler.plots[1].plot(metadatahandler.tvsd[0], metadatahandler.tvsd[1], 'ro', picker=10)
+    metadatahandler.plots[1].errorbar(metadatahandler.tvsd[0], metadatahandler.tvsd[1], yerr=metadatahandler.tvsd[3], xerr=metadatahandler.tvsd[2], fmt='r+')
+
+    metadatahandler.canvas.draw()
+    metadatahandler.frame.update()
+    frame.destroy()
 
 def file_save():
     f = filedialog.asksaveasfilename(defaultextension=".pdf", filetypes=(("PDF", "*.pdf"),("JPEG", "*.jpg"),("PNG", "*.png"),("All Files", "*.*") ))
