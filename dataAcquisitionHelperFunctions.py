@@ -287,7 +287,8 @@ class dataAcquisition:
     def plotHistogram(self, plot, plotParameters, filename, counts):
         """"""
         #fibreName = "Y-11J"
-        plot.clear()
+        for artist in plot.collections:
+            artist.remove()
         #print(self.results)
         plot.hist(self.results,bins=int(np.sqrt(counts)),density=True)
         #plot.title("Timing Resolution of {} WLSF".format(fibreName))

@@ -34,9 +34,9 @@ def selectSaveDirectory(window, placerow, name):
     browseLabel.grid(row=placerow, column=0, sticky=W, pady=5)
     browseButton.grid(row=placerow, column=2)
 
-    return folderPath.get()
+    return folderPath
 
-def initPlotFigures(window):
+def initPlotFigures(window, row):
     #Initialize the two plots that are run in the rightFrame
     #This function will create a figure with 2 subplots stacked vertically
     fig, ax = plt.subplots(2)
@@ -53,7 +53,7 @@ def initPlotFigures(window):
 
     plt.tight_layout()
     canvas = FigureCanvasTkAgg(fig, master=window)
-    canvas.get_tk_widget().pack(expand=True)
+    canvas.get_tk_widget().grid(column=0, row = row)
     canvas.draw()
 
 
