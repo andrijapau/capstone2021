@@ -108,7 +108,7 @@ def create_left_frame(container, plots, canvas, mu, sigma):
     separator = ttk.Separator(frame, orient='horizontal')
     separator.grid(row=7, columnspan=4, sticky = tk.EW)
 
-    tk.Label(frame, text='Plotting Functions:').grid(column=0, row=8, sticky=tk.W)
+    tk.Label(frame, text='Import Data:').grid(column=0, row=8, sticky=tk.W)
 
     readpath = tk.StringVar(value="No file selected")
     tk.Label(frame, text='Read T vs D Data:').grid(column=0, row=9, sticky=tk.W)
