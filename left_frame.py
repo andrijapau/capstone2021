@@ -9,9 +9,7 @@ import matplotlib as plt
 import numpy as np
 
 def askopen(frame, filename):
-    f = filedialog.askopenfilename()
-    if not f.endswith(("TvsD.csv")):
-        return
+    f = filedialog.askopenfilename(filetypes=(("T vs D Data", "*TvsD.csv"),("All Files", "*.*") ))
     filename.set(f)
     frame.update()
 

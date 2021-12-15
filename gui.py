@@ -115,8 +115,8 @@ def saveparameter(frame, counts, path, fiblength, disuncer, disaway, fib):
     np.savetxt(f, [counts, path, fiblength, disuncer, disaway, fibname], fmt = '%s')
     frame.destroy()
 
-def loadparam(leftframe, metadata):
-    f = filedialog.askopenfilename()
+def loadparam(leftframe):
+    f = filedialog.askopenfilename(defaultextension=".txt", filetypes=(("Text File", "*.txt"),("All Files", "*.*")))
     data = np.loadtxt(f, dtype = 'U')
     fibselected = int(data[5][-1]) - 1
     fcounter = 0
@@ -229,7 +229,7 @@ window.config(menu=menubar)
 
 fileMenu = Menu(menubar)
 fileMenu.add_command(label="Experiment Profile Builder...", command=constructprofile)
-fileMenu.add_command(label="Load Experiment Profile", command= lambda : loadparam(leftFrame, metadatahandler))
+fileMenu.add_command(label="Load Experiment Profile", command= lambda : loadparam(leftFrame))
 fileMenu.add_command(label="Exit", command=window.quit)
 
 
