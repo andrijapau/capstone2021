@@ -13,14 +13,18 @@ yData = np.random.rand(1000,1)
 #################
 
 # Create application window
+
+
 window, w, h = gui.createWindow()
 window.columnconfigure(0, weight=1)
 window.columnconfigure(1, weight=1)
 rightFrame = Frame(window)
-rightFrame.rowconfigure(0, weight = 8)
+rightFrame.rowconfigure(1, weight = 8)
 plots = [None] * 2
-fig, plots[0], plots[1], canvas = gui.initPlotFigures(rightFrame, 0)
+fig, plots[0], plots[1], canvas = gui.initPlotFigures(rightFrame, 1)
 
+mean = StringVar(value="Not Yet Fitted")
+stdev = StringVar(value="Not Yet Fitted")
 
 def on_pick(event):
     artist = event.artist
@@ -149,12 +153,34 @@ def constructprofile():
 
     win.mainloop()
 
+def clearplots():
+    metadatahandler.tvsd = [[]] * 4
+
+    plots[0].clear()
+    plots[1].clear()
+    plots[0].set_title("Most recent collection")
+    plots[0].set_xlabel("Time (ns)")
+    plots[0].set_ylabel("Counts")
+    plots[1].set_title("Timing vs. Length")
+    plots[1].set_xlabel("Length (cm)")
+    plots[1].set_ylabel("Time (s)")
+    metadatahandler.canvas.draw()
+    window.update()
 
 fig.canvas.callbacks.connect('pick_event', on_pick)
+bframe = Frame(rightFrame)
+bframe.grid(column=0, row=2)
+Button(bframe, text='Save Plot', command = file_save).grid(column=1, row=0, pady=10, padx=5)
+Button(bframe, text='Clear Plot', command = clearplots).grid(column=0, row=0, pady=10,padx=5)
 
-Button(rightFrame, text='Save Plot', command = file_save).grid(column=0, row=1, pady=10)
+topFrame = Frame(rightFrame)
+topFrame.grid(column=0,row=0)
+Label(topFrame, text = 'Fitted Mean:').grid(column=0, row=0)
+Label(topFrame, textvariable = mean).grid(column=1, row=0)
+Label(topFrame, text = 'Fitted Uncertainty:').grid(column=2, row=0)
+Label(topFrame, textvariable = stdev).grid(column=3, row=0)
 
-leftFrame, metadatahandler = create_left_frame(window, plots, canvas)
+leftFrame, metadatahandler = create_left_frame(window, plots, canvas, mean, stdev)
 
 leftFrame.grid(row=0,column=0, padx=20, pady=50)
 rightFrame.grid(row=0,column=1, padx=20, pady=50)

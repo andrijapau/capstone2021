@@ -17,16 +17,21 @@ def askopen(frame, filename):
 
 def changetvsd(metadata, filename):
     file = filename.get()
-    metadata.tvsd = [[]] * 4
     with open(file, "r") as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
         for lines in csv_reader:
             for i in range(4):
                 metadata.tvsd[i] = metadata.tvsd[i] + [float(lines[i])]
-    for artist in metadata.plots[0].collections:
-        artist.remove()
-    for artist in metadata.plots[1].collections:
-        artist.remove()
+    metadata.plots[0].clear()
+    metadata.plots[1].clear()
+
+    metadata.plots[0].set_title("Most recent collection")
+    metadata.plots[0].set_xlabel("Time (ns)")
+    metadata.plots[0].set_ylabel("Counts")
+    metadata.plots[0].set_title("Timing vs. Length")
+    metadata.plots[1].set_xlabel("Length (cm)")
+    metadata.plots[1].set_ylabel("Time (s)")
+
     metadata.plots[1].plot(metadata.tvsd[0], metadata.tvsd[1], 'ro', picker=10)
     metadata.plots[1].errorbar(metadata.tvsd[0], metadata.tvsd[1], yerr=metadata.tvsd[3], xerr=metadata.tvsd[2], fmt='r+')
     metadata.canvas.draw()
@@ -45,8 +50,7 @@ def linearfit(metadata, slopes, inter, derr,pi):
     pi.set(p)
     metadata.frame.update()
 
-
-def create_left_frame(container, plots, canvas):
+def create_left_frame(container, plots, canvas, mu, sigma):
 
     frame = tk.Frame(container)
 
@@ -94,7 +98,7 @@ def create_left_frame(container, plots, canvas):
     saveall = tk.BooleanVar()
     tk.Checkbutton(bottombuttonframe, text="Save T vs D Data", variable=saveall).grid(column=1, row =0)
 
-    metadata = meta_data_handler(frame, plots, canvas, [selfib1, selfib2, selfib3], save, saveall)
+    metadata = meta_data_handler(frame, plots, canvas, [selfib1, selfib2, selfib3], save, saveall, mu, sigma)
 
     tk.Button(bottombuttonframe, text='Lock in Parameter', command = metadata.lockin).grid(column=2, row=0)
     tk.Button(bottombuttonframe, text='Run Next', command=metadata.runNext, state = 'disabled').grid(column=3, row=0)
@@ -118,7 +122,7 @@ def create_left_frame(container, plots, canvas):
 
     buttonframe = tk.Frame(frame)
     buttonframe.grid(column=1, row=10, columnspan=2)
-    tk.Button(buttonframe, text='Plot Timing Graph', width=15, command = lambda : changetvsd(metadata,readpath)).grid(column=0, row=0,sticky=tk.W, padx=5,pady=5)
+    tk.Button(buttonframe, text='Load T vs D Data', width=15, command = lambda : changetvsd(metadata,readpath)).grid(column=0, row=0,sticky=tk.W, padx=5,pady=5)
     tk.Button(buttonframe, text='Linear Fit', command = lambda : linearfit(metadata, slope, intercept, derr, p)).grid(column=1, row=0, sticky=tk.W, padx=5,pady=5)
 
     tk.Label(frame, text = "The fitted slope is:").grid(column=0, row=11, sticky=tk.W)

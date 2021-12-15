@@ -5,6 +5,7 @@ import datetime
 import numpy as np
 import tkinter as tk
 from tqdm import tqdm
+import csv
 
 
 
@@ -21,19 +22,21 @@ def invalidinput():
     win.mainloop()
 
 class meta_data_handler():
-    def __init__(self, frame, plots, canvas, fibchecks, save, saveall):
+    def __init__(self, frame, plots, canvas, fibchecks, save, saveall, mean, stdev):
         self.frame = frame
         self.metadata = [None] * 6
         self.dataAcq = None
         self.currfilename = None
         self.chanNumber = 0
-        self.ifstopped = False
+        self.ifstopped = tk.BooleanVar()
         self.plots = plots
         self.canvas = canvas
         self.tvsd = [[]]*4
         self.fibchecks = fibchecks
         self.save = save
         self.saveall = saveall
+        self.mean = mean
+        self.stdev = stdev
         
         #counts, directory name, fiber length, Distance Away, uncertainty,  fiber name,
 
@@ -48,7 +51,6 @@ class meta_data_handler():
         for i in range(3):
             if self.fibchecks[i].get() == True:
                 self.metadata[5] = 'Fiber' + str(i+1)
-        print(self.metadata)
 
     def runNext(self):
         self.dataAcq.results = []
@@ -58,20 +60,24 @@ class meta_data_handler():
         for i in tqdm(range(int(self.metadata[0]))):
             if i % 20 == 0:
                 self.plotHist()
-            if self.ifstopped == True:
+            if self.ifstopped.get() == True:
                 break
             else:
                 self.dataAcq.collectData(channels=self.chanNumber)
         # Plot data
+        x, pd, mu, sigma = run.curveFit(self.plots[0], array = self.dataAcq.results)
+        self.mean.set(my)
+        self.stdev.set(sigma)
+
         self.plotHist()
+
         if self.save.get():
-            print("im true")
             np.savetxt(self.currfilename, self.dataAcq.results, delimiter=",")
 
-        x, pd, mu, sigma = run.curveFit(self.plots[0], array = self.dataAcq.results)
         self.plots[0].plot(x,pd)
-        d = float(self.metadata[3])
-        sigmad = float(self.metadata[4])
+        sigmad = float(self.metadata[3])
+        d = float(self.metadata[4])
+
         self.tvsd[0] = self.tvsd[0] + [d]
         self.tvsd[1] = self.tvsd[1] + [mu]
         self.tvsd[2] = self.tvsd[2] + [sigmad]
@@ -81,8 +87,8 @@ class meta_data_handler():
         self.plots[1].set_title("Timing vs. Length")
         self.plots[1].set_xlabel("Length (cm)")
         self.plots[1].set_ylabel("Time (s)")
-            
-        self.plots[1].plot(self.tvsd[0], self.tvsd[1], 'r+', picker=10)
+
+        self.plots[1].plot(self.tvsd[0], self.tvsd[1], 'ro', picker=10)
         self.plots[1].errorbar(self.tvsd[0], self.tvsd[1], yerr=self.tvsd[3], xerr=self.tvsd[2], fmt='r+')
         
        
@@ -98,6 +104,7 @@ class meta_data_handler():
     def lockin(self):
         counter = 0
         bcounter = 0
+
         if not threewayxor(self.fibchecks[0].get(), self.fibchecks[1].get(),self.fibchecks[2].get()):
             invalidinput()
         for widget in self.frame.winfo_children():
@@ -111,7 +118,6 @@ class meta_data_handler():
                         except:
                             invalidinput()
                     counter = counter + 1
-
         counter = 0
         for widget in self.frame.winfo_children():
             if counter < 4:
@@ -132,7 +138,7 @@ class meta_data_handler():
                         bcounter = bcounter + 1
 
 
-        self.ifstopped = False
+        self.ifstopped.set(False)
         trigParams, chanParams, timeParams, chanNumbers = run.setupOscilloscopeInput()
         self.chanNumber = chanNumbers
         dataAcq = run.dataAcquisition()
@@ -140,17 +146,22 @@ class meta_data_handler():
                                     timeParameters= timeParams)
 
         self.dataAcq = dataAcq
-
+        self.grab_meta_data()
 
 
     def stopscan(self):
         if not self.metadata == [None] * 6 and self.saveall.get():
             time = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-            print(self.metadata)
             tvsdfilename = self.metadata[1] + '\\' + 'MATHUSLA_' + self.metadata[0] + '_' + self.metadata[5] + '_'.join(
                 self.metadata[2:4]) + '_' + time + '_TvsD' +'.csv'
-            np.savetxt(tvsdfilename, self.tvsd, delimiter=",")
-        self.ifstopped = True
+            with open(tvsdfilename, 'w', newline='') as csvfile:
+                writer = csv.writer(csvfile, delimiter=',')
+
+                for i in range(len(self.tvsd[0])):
+                    print([self.tvsd[0][i], self.tvsd[1][i],self.tvsd[2][i], self.tvsd[3][i]])
+                    writer.writerow([self.tvsd[0][i], self.tvsd[1][i],self.tvsd[2][i], self.tvsd[3][i]])
+
+        self.ifstopped.set(True)
         self.tvsd = [[None]]*4
         counter = 0
         bcounter = 0
