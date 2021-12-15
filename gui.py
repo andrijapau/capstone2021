@@ -77,13 +77,42 @@ def file_save():
     print(extent)
     fig.savefig(f, bbox_inches=extent)
 
+def threewayxor(a, b, c):
+    return (a ^ b ^ c) and (not(a and b and c))
+
+def invalidinput():
+    win = Toplevel()
+    win.wm_title("Bad Input")
+
+    l = Label(win, text="Hey! No Pressure King. But did you put something wrong in here?", font=25)
+    l.grid(row=0, column=0, padx=20, pady=10)
+
+    a = Button(win, text="Yeah you right mb", command=win.destroy)
+    a.grid(row=1, column=0, padx=20, pady=10)
+
+    win.mainloop()
+
 def saveparameter(frame, counts, path, fiblength, disuncer, disaway, fib):
+
+    if not threewayxor(fib[0].get(), fib[1].get(), fib[2].get()):
+        invalidinput()
+        return -1
+    if path == "" or path == None:
+        invalidinput()
+        return -1
+    for i in [counts, fiblength, disuncer,disaway]:
+        try:
+            test = float(i)
+        except:
+            invalidinput()
+            return -1
+
     f = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=(("Text File", "*.txt"),("All Files", "*.*")))
     fibname = None
     for i in range(3):
         if fib[i].get() == True:
             fibname = 'Fiber' + str(i + 1)
-    np.savetxt(f, [counts, path, fiblength, disuncer, disaway, fibname],fmt = '%s')
+    np.savetxt(f, [counts, path, fiblength, disuncer, disaway, fibname], fmt = '%s')
     frame.destroy()
 
 def loadparam(leftframe, metadata):
