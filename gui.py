@@ -196,11 +196,19 @@ def clearplots():
     metadatahandler.canvas.draw()
     window.update()
 
+def savedata():
+    tvsdfilename = filedialog.asksaveasfilename(defaultextension=".csv", filetypes=(("CSV File", "*.csv"),("All Files", "*.*")))
+    with open(tvsdfilename, 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile, delimiter=',')
+        for i in range(len(metadatahandler.tvsd[0])):
+            writer.writerow([metadatahandler.tvsd[0][i], metadatahandler.tvsd[1][i], metadatahandler.tvsd[2][i], metadatahandler.tvsd[3][i]])
+
 fig.canvas.callbacks.connect('pick_event', on_pick)
 bframe = Frame(rightFrame)
 bframe.grid(column=0, row=2)
 Button(bframe, text='Save Plot', command = file_save).grid(column=1, row=0, pady=10, padx=5)
 Button(bframe, text='Clear Plot', command = clearplots).grid(column=0, row=0, pady=10,padx=5)
+Button(bframe, text= 'Save Plot Data', command = savedata).grid(column=2, row=0, pady=10, padx=5)
 
 topFrame = Frame(rightFrame)
 topFrame.grid(column=0,row=0)

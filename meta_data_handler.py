@@ -156,7 +156,6 @@ class meta_data_handler():
                 self.metadata[2:4]) + '_' + time + '_TvsD' +'.csv'
             with open(tvsdfilename, 'w', newline='') as csvfile:
                 writer = csv.writer(csvfile, delimiter=',')
-
                 for i in range(len(self.tvsd[0])):
                     print([self.tvsd[0][i], self.tvsd[1][i],self.tvsd[2][i], self.tvsd[3][i]])
                     writer.writerow([self.tvsd[0][i], self.tvsd[1][i],self.tvsd[2][i], self.tvsd[3][i]])
