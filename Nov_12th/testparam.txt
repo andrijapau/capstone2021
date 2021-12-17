@@ -1,6 +1,0 @@
-100
-D:\Downloads\capstone
-300
-0.5
-0
-Fiber1
