@@ -197,7 +197,7 @@ def clearplots():
     window.update()
 
 def savedata():
-    tvsdfilename = filedialog.asksaveasfilename(defaultextension=".csv", filetypes=(("CSV File", "*.csv"),("All Files", "*.*")))
+    tvsdfilename = filedialog.asksaveasfilename(defaultextension=".csv", filetypes=(("T vs D Data", "*TvsD.csv"),("All Files", "*.*")))
     with open(tvsdfilename, 'w', newline='') as csvfile:
         writer = csv.writer(csvfile, delimiter=',')
         for i in range(len(metadatahandler.tvsd[0])):

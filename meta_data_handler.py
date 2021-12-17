@@ -7,7 +7,17 @@ import tkinter as tk
 from tqdm import tqdm
 import csv
 
+def baddata():
+    win = tk.Toplevel()
+    win.wm_title("Bad Data")
 
+    l = tk.Label(win, text="Data Collected is too wild?", font=25)
+    l.grid(row=0, column=0, padx=20, pady=10)
+
+    a = tk.Button(win, text="Okay", command=win.destroy)
+    a.grid(row=1, column=0, padx=20, pady=10)
+
+    win.mainloop()
 
 def invalidinput():
     win = tk.Toplevel()
@@ -65,8 +75,12 @@ class meta_data_handler():
             else:
                 self.dataAcq.collectData(channels=self.chanNumber)
         # Plot data
-        x, pd, mu, sigma = run.curveFit(self.plots[0], array = self.dataAcq.results)
-        self.mean.set(my)
+        try:
+            x, pd, mu, sigma = run.curveFit(self.plots[0], array = self.dataAcq.results)
+        except:
+            baddata()
+
+        self.mean.set(mu)
         self.stdev.set(sigma)
 
         self.plotHist()
@@ -75,6 +89,7 @@ class meta_data_handler():
             np.savetxt(self.currfilename, self.dataAcq.results, delimiter=",")
 
         self.plots[0].plot(x,pd)
+
         sigmad = float(self.metadata[3])
         d = float(self.metadata[4])
 
@@ -88,14 +103,12 @@ class meta_data_handler():
         self.plots[1].set_xlabel("Length (cm)")
         self.plots[1].set_ylabel("Time (s)")
 
+
         self.plots[1].plot(self.tvsd[0], self.tvsd[1], 'ro', picker=10)
         self.plots[1].errorbar(self.tvsd[0], self.tvsd[1], yerr=self.tvsd[3], xerr=self.tvsd[2], fmt='r+')
-        
-       
-            
+
         self.canvas.draw()
         self.frame.update()
-        #self.frame.update()
 
     def delete(self, ind):
         del seld.tvsd[ind]
@@ -120,7 +133,7 @@ class meta_data_handler():
                     counter = counter + 1
         counter = 0
         for widget in self.frame.winfo_children():
-            if counter < 4:
+            if counter < 3:
                 if widget.winfo_class() == 'Entry':
                     if widget.get() == "":
                         invalidinput()
@@ -139,6 +152,7 @@ class meta_data_handler():
 
 
         self.ifstopped.set(False)
+        self.grab_meta_data()
         trigParams, chanParams, timeParams, chanNumbers = run.setupOscilloscopeInput()
         self.chanNumber = chanNumbers
         dataAcq = run.dataAcquisition()
@@ -146,14 +160,14 @@ class meta_data_handler():
                                     timeParameters= timeParams)
 
         self.dataAcq = dataAcq
-        self.grab_meta_data()
 
 
     def stopscan(self):
-        if not self.metadata == [None] * 6 and self.saveall.get():
+        if not self.metadata == [None] * 6 and self.saveall.get() and self.tvsd[0]:
             time = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
             tvsdfilename = self.metadata[1] + '\\' + 'MATHUSLA_' + self.metadata[0] + '_' + self.metadata[5] + '_'.join(
                 self.metadata[2:4]) + '_' + time + '_TvsD' +'.csv'
+            print(tvsdfilename)
             with open(tvsdfilename, 'w', newline='') as csvfile:
                 writer = csv.writer(csvfile, delimiter=',')
                 for i in range(len(self.tvsd[0])):
@@ -165,7 +179,7 @@ class meta_data_handler():
         counter = 0
         bcounter = 0
         for widget in self.frame.winfo_children():
-            if counter < 4:
+            if counter < 3:
                 if widget.winfo_class() == 'Entry':
                     widget.config(state = "normal")
                     counter = counter + 1
