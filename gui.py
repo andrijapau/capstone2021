@@ -13,7 +13,7 @@ yData = np.random.rand(1000,1)
 #################
 
 # Create application window
-
+tohistoplot = np.loadtxt("./MATHUSLA_5000_Fiber1_300_1_2021_12_14_16_28_59.csv")
 
 window, w, h = gui.createWindow()
 window.columnconfigure(0, weight=1)
@@ -22,6 +22,13 @@ rightFrame = Frame(window)
 rightFrame.rowconfigure(1, weight = 8)
 plots = [None] * 2
 fig, plots[0], plots[1], canvas = gui.initPlotFigures(rightFrame, 1)
+
+
+plots[0].hist(tohistoplot,bins=int(np.sqrt(5000)),density=True)
+
+canvas.draw()
+window.update()
+
 
 mean = StringVar(value="Not Yet Fitted")
 stdev = StringVar(value="Not Yet Fitted")
@@ -189,7 +196,7 @@ def clearplots():
     plots[1].clear()
     plots[0].set_title("Most recent collection")
     plots[0].set_xlabel("Time (ns)")
-    plots[0].set_ylabel("Counts")
+    plots[0].set_ylabel("Normalized Counts")
     plots[1].set_title("Timing vs. Length")
     plots[1].set_xlabel("Length (cm)")
     plots[1].set_ylabel("Time (s)")

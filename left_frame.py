@@ -4,7 +4,7 @@ import guiHelperFunctions as gui
 from meta_data_handler import meta_data_handler
 from tkinter import filedialog
 import csv
-from scipy import stats
+from linearreg import *
 import matplotlib as plt
 import numpy as np
 
@@ -20,13 +20,9 @@ def changetvsd(metadata, filename):
         for lines in csv_reader:
             for i in range(4):
                 metadata.tvsd[i] = metadata.tvsd[i] + [float(lines[i])]
-    metadata.plots[0].clear()
     metadata.plots[1].clear()
 
-    metadata.plots[0].set_title("Most recent collection")
-    metadata.plots[0].set_xlabel("Time (ns)")
-    metadata.plots[0].set_ylabel("Counts")
-    metadata.plots[0].set_title("Timing vs. Length")
+    metadata.plots[1].set_title("Timing vs. Length")
     metadata.plots[1].set_xlabel("Length (cm)")
     metadata.plots[1].set_ylabel("Time (s)")
 
@@ -35,18 +31,79 @@ def changetvsd(metadata, filename):
     metadata.canvas.draw()
     metadata.frame.update()
 
-def linearfit(metadata, slopes, inter, derr,pi):
-    slope, intercept, r, p, se = stats.linregress(metadata.tvsd[0], metadata.tvsd[1])
+def linearfit(metadata, slopes, inter, derr,intererr,pi):
+    #result = stats.linregress(metadata.tvsd[0], metadata.tvsd[1])
+    result = linfit(metadata.tvsd[0], metadata.tvsd[1], metadata.tvsd[2], metadata.tvsd[3])
 
     x_vals = np.array(metadata.plots[1].get_xlim())
-    y_vals = intercept + slope * x_vals
+    y_vals = result[1] + result[0] * x_vals
+
     metadata.plots[1].plot(x_vals, y_vals, '--')
     metadata.canvas.draw()
-    slopes.set(slope)
-    inter.set(intercept)
-    derr.set(se)
-    pi.set(p)
+    slopes.set(result[0])
+    inter.set(result[1])
+    derr.set(result[2])
+    intererr.set(result[3])
+    pi.set(result[4])
     metadata.frame.update()
+
+def cald(frame, result, time, dpos, duncer):
+    time = time*10**(-9)
+    dpos.set(time * result[0] + result[1])
+    duncer.set(time * result[2]/result[0] + result[3])
+    frame.update()
+
+def dvstFrame(metadata):
+    win = tk.Toplevel()
+    win.wm_title("DvsT Plot")
+
+    fig, ax, canvas = gui.initDvsTFigures(win, 0)
+
+    ax.plot(metadata.tvsd[1], metadata.tvsd[0], 'ro', picker=10)
+    ax.errorbar(metadata.tvsd[1], metadata.tvsd[0], xerr=metadata.tvsd[3], yerr=metadata.tvsd[2], fmt='r+')
+    result = linfit(metadata.tvsd[1], metadata.tvsd[0], metadata.tvsd[3], metadata.tvsd[2], 1000000)
+
+    x_vals = np.array(ax.get_xlim())
+    y_vals = result[1] + result[0] * x_vals
+
+    ax.plot(x_vals, y_vals, '--')
+    canvas.draw()
+
+    dpos = tk.DoubleVar(value=0)
+    duncer = tk.DoubleVar(value=0)
+    timed = tk.DoubleVar(value=0)
+    iframe = tk.Frame(win)
+
+    iframe.grid(row=1, column =0, rowspan=2, pady = 10)
+    tk.Label(iframe, text = "Enter Timing Delay (ns)").grid(row=0,column = 0, padx = 10, sticky=tk.W)
+    tk.Entry(iframe, textvariable = timed).grid(row=0,column = 1, padx = 10, sticky=tk.W)
+
+    tk.Button(iframe, text="Calculate", command = lambda : cald(win, result, timed.get(), dpos, duncer)).grid(row=0,column=2, padx = 10, sticky=tk.W)
+
+    tk.Label(iframe, text = "Position Hit (cm)").grid(row=1,column = 0, padx = 10, sticky=tk.W)
+    tk.Label(iframe, textvariable=dpos).grid(row=1,column = 1, padx = 10, sticky=tk.W)
+    tk.Label(iframe, text = "Uncertainty").grid(row=1,column = 2, padx = 10, sticky=tk.W)
+    tk.Label(iframe, textvariable=duncer).grid(row=1,column = 3, padx = 10, sticky=tk.W)
+
+
+    fitFrame = tk.Frame(win)
+    fitFrame.grid(row=3, column=0, pady=10)
+    tk.Label(fitFrame, text = "The fitted slope is:").grid(column=0, row=1, sticky=tk.W)
+    tk.Label(fitFrame, text=result[0], width = 25).grid(column=1, row=1, sticky=tk.W)
+
+    tk.Label(fitFrame, text="The fitted Intercept is:").grid(column=0, row=2, sticky=tk.W)
+    tk.Label(fitFrame, text=result[1], width=25).grid(column=1, row=2, sticky=tk.W)
+
+    tk.Label(fitFrame, text="The standard deviation on slope is:").grid(column=0, row=3, sticky=tk.W)
+    tk.Label(fitFrame, text=result[2], width=25).grid(column=1, row=3, sticky=tk.W)
+
+    tk.Label(fitFrame, text="The standard deviation on the intercept is:").grid(column=0, row=4, sticky=tk.W)
+    tk.Label(fitFrame, text=result[3], width=25).grid(column=1, row=4, sticky=tk.W)
+
+    tk.Label(fitFrame, text="With residual variance of:").grid(column=0, row=5, sticky=tk.W)
+    tk.Label(fitFrame, text=result[4], width=25).grid(column=1, row=5, sticky=tk.W)
+
+    win.mainloop()
 
 def create_left_frame(container, plots, canvas, mu, sigma):
 
@@ -116,12 +173,14 @@ def create_left_frame(container, plots, canvas, mu, sigma):
     slope = tk.StringVar(value="Not yet fitted")
     intercept = tk.StringVar(value="Not yet fitted")
     derr = tk.StringVar(value="Not yet fitted")
+    intererr = tk.StringVar(value = "Not yet fitted")
     p = tk.StringVar(value="Not yet fitted")
 
     buttonframe = tk.Frame(frame)
     buttonframe.grid(column=1, row=10, columnspan=2)
     tk.Button(buttonframe, text='Load T vs D Data', width=15, command = lambda : changetvsd(metadata,readpath)).grid(column=0, row=0,sticky=tk.W, padx=5,pady=5)
-    tk.Button(buttonframe, text='Linear Fit', command = lambda : linearfit(metadata, slope, intercept, derr, p)).grid(column=1, row=0, sticky=tk.W, padx=5,pady=5)
+    tk.Button(buttonframe, text='Linear Fit', command = lambda : linearfit(metadata, slope, intercept, derr, intererr, p)).grid(column=1, row=0, sticky=tk.W, padx=5,pady=5)
+    tk.Button(buttonframe, text='D vs T Graph', command = lambda : dvstFrame(metadata)).grid(column=2, row=0, sticky=tk.W, padx=5,pady=5)
 
     tk.Label(frame, text = "The fitted slope is:").grid(column=0, row=11, sticky=tk.W)
     tk.Label(frame, textvariable=slope, width = 25).grid(column=1, row=11, sticky=tk.W)
@@ -132,8 +191,11 @@ def create_left_frame(container, plots, canvas, mu, sigma):
     tk.Label(frame, text="The standard deviation on slope is:").grid(column=0, row=13, sticky=tk.W)
     tk.Label(frame, textvariable=derr, width=25).grid(column=1, row=13, sticky=tk.W)
 
-    tk.Label(frame, text="With p value of:").grid(column=0, row=14, sticky=tk.W)
-    tk.Label(frame, textvariable=p, width=25).grid(column=1, row=14, sticky=tk.W)
+    tk.Label(frame, text="The standard deviation on the intercept is:").grid(column=0, row=14, sticky=tk.W)
+    tk.Label(frame, textvariable=intererr, width=25).grid(column=1, row=14, sticky=tk.W)
+
+    tk.Label(frame, text="With residual variance of:").grid(column=0, row=15, sticky=tk.W)
+    tk.Label(frame, textvariable=p, width=25).grid(column=1, row=15, sticky=tk.W)
     # tk.Button(buttonframe, text='Plot Flat Color Plot', width=15).grid(column=0, row=1, sticky=tk.E, padx=5,pady=5)
     # tk.Button(buttonframe, text='Plot Full 3D Plot', width=15).grid(column=1, row=1, sticky=tk.W, padx=5,pady=5)
 

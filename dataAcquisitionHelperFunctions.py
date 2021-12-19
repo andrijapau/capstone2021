@@ -290,12 +290,7 @@ class dataAcquisition:
         plot.clear()
         plot.set_title("Most recent collection")
         plot.set_xlabel("Time (ns)")
-        plot.set_ylabel("Counts")
-        #print(self.results)
+        plot.set_ylabel("Normalized Counts")
         plot.hist(self.results,bins=int(np.sqrt(counts)),density=True)
-        #plot.title("Timing Resolution of {} WLSF".format(fibreName))
-        # plot.ylabel("Counts")
-        # plot.xlabel("Delay (s)")
-        # plot.xlim([88E-9,95E-9])
-        #plt.show()
+
 

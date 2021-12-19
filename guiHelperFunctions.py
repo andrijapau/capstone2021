@@ -36,11 +36,26 @@ def selectSaveDirectory(window, placerow, name):
 
     return folderPath
 
+def initDvsTFigures(window,row):
+    #Initialize the two plots that are run in the rightFrame
+    #This function will create a figure with 2 subplots stacked vertically
+    fig, ax = plt.subplots(1)
+
+    ax.set_title("D vs T")
+    ax.set_xlabel("Time (s)")
+    ax.set_ylabel("Distance away (cm)")
+
+    plt.tight_layout()
+    canvas = FigureCanvasTkAgg(fig, master=window)
+    canvas.get_tk_widget().grid(column=0, row = row)
+    canvas.draw()
+
+    return fig, ax, canvas
+
 def initPlotFigures(window, row):
     #Initialize the two plots that are run in the rightFrame
     #This function will create a figure with 2 subplots stacked vertically
     fig, ax = plt.subplots(2)
-
 
     a = ax[0]
     a.set_title("Most recent collection")
