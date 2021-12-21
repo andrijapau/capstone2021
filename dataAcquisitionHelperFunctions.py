@@ -79,16 +79,12 @@ def generateCurveFitData(data):
             dy = np.append(dy,DY)
     return x,y,dy
 
-def gaussian(x, *p):
-    # Gaussian guess function
-    return p[0] + p[1] * np.exp(-1 * (x - p[2]) ** 2 / (2 * p[3] ** 2))
-
 def curveFit(plot, fileName = None, array = None):
     # Load data and convert to ns scale
     data = []
-    if fileName != None:
+    if not fileName == None:
         data = np.loadtxt(fileName)
-    elif array != None:
+    elif not array.any() == None:
         data = array
     else:
         print("yo dumb")
@@ -284,6 +280,7 @@ class dataAcquisition:
         """"""
         self.results += [data]
 
+#to delete
     def plotHistogram(self, plot, plotParameters, filename, counts):
         """"""
         #fibreName = "Y-11J"

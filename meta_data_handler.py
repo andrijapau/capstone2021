@@ -6,32 +6,11 @@ import numpy as np
 import tkinter as tk
 from tqdm import tqdm
 import csv
+import guiHelperFunctions as gui
 
-def baddata():
-    win = tk.Toplevel()
-    win.wm_title("Bad Data")
-
-    l = tk.Label(win, text="Data Collected is too wild?", font=25)
-    l.grid(row=0, column=0, padx=20, pady=10)
-
-    a = tk.Button(win, text="Okay", command=win.destroy)
-    a.grid(row=1, column=0, padx=20, pady=10)
-
-    win.mainloop()
-
-def invalidinput():
-    win = tk.Toplevel()
-    win.wm_title("Bad Input")
-
-    l = tk.Label(win, text="Hey! No Pressure King. But did you put something wrong in here?", font=25)
-    l.grid(row=0, column=0, padx=20, pady=10)
-
-    a = tk.Button(win, text="Yeah you right mb", command=win.destroy)
-    a.grid(row=1, column=0, padx=20, pady=10)
-
-    win.mainloop()
 
 class meta_data_handler():
+
     def __init__(self, frame, plots, canvas, fibchecks, save, saveall, mean, stdev):
         self.frame = frame
         self.metadata = [None] * 6
@@ -78,7 +57,7 @@ class meta_data_handler():
         try:
             x, pd, mu, sigma = run.curveFit(self.plots[0], array = self.dataAcq.results)
         except:
-            baddata()
+            gui.baddata()
 
         self.mean.set(mu)
         self.stdev.set(sigma)
@@ -118,25 +97,25 @@ class meta_data_handler():
         counter = 0
         bcounter = 0
 
-        if not threewayxor(self.fibchecks[0].get(), self.fibchecks[1].get(),self.fibchecks[2].get()):
-            invalidinput()
+        if not gui.threewayxor(self.fibchecks[0].get(), self.fibchecks[1].get(),self.fibchecks[2].get()):
+            gui.invalidinput()
         for widget in self.frame.winfo_children():
             if counter < 4:
                 if widget.winfo_class() == 'Entry':
                     if widget.get() == "":
-                        invalidinput()
+                        gui.invalidinput()
                     elif counter != 1:
                         try:
                             test = float(widget.get())
                         except:
-                            invalidinput()
+                            gui.invalidinput()
                     counter = counter + 1
         counter = 0
         for widget in self.frame.winfo_children():
             if counter < 3:
                 if widget.winfo_class() == 'Entry':
                     if widget.get() == "":
-                        invalidinput()
+                        gui.invalidinput()
                     widget.config(state = "disabled")
                     counter = counter + 1
             if widget.winfo_class() == 'Frame':
@@ -175,7 +154,7 @@ class meta_data_handler():
                     writer.writerow([self.tvsd[0][i], self.tvsd[1][i],self.tvsd[2][i], self.tvsd[3][i]])
 
         self.ifstopped.set(True)
-        self.tvsd = [[None]]*4
+        self.tvsd = [[]]*4
         counter = 0
         bcounter = 0
         for widget in self.frame.winfo_children():
@@ -204,7 +183,5 @@ class meta_data_handler():
         #     print("WTF IS GOING ON")
         return 0
 
-def threewayxor(a, b, c):
-    return (a ^ b ^ c) and (not(a and b and c))
 
 
